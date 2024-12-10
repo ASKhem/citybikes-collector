@@ -1,9 +1,11 @@
 # 🚲 CityBikes Data Collector
 
 ## 📝 Descrición
+
 Este proxecto é unha ferramenta para recoller e exportar datos das estacións de bicicletas públicas. Permite obter información en tempo real sobre a dispoñibilidade de bicicletas e gardar os datos en diferentes formatos para a súa posterior análise.
 
 ## ⭐ Características principais
+
 - 🔄 Recollida de datos en tempo real das estacións de bicicletas
 - 💾 Almacenamento en MongoDB
 - 📊 Exportación de datos en formatos CSV e Parquet
@@ -11,11 +13,13 @@ Este proxecto é unha ferramenta para recoller e exportar datos das estacións d
 - 🔋 Seguimento de bicicletas normais e eléctricas
 
 ## 📂 Requisitos previos
+
 - Python 3.8 ou superior
 - MongoDB instalado e en execución
 - pip (xestor de paquetes de Python)
 
 ## 📚 Dependencias principais
+
 - `pandas`: Manipulación e análise de datos
 - `pymongo`: Conexión con MongoDB
 - `pyarrow`: Soporte para formato Parquet
@@ -26,24 +30,30 @@ Este proxecto é unha ferramenta para recoller e exportar datos das estacións d
 ## 🚀 Instalación
 
 ### 1. Clonar o repositorio:
+
 ```bash
 git clone https://github.com/ASKhem/data-fetching-scripts.git
 cd citybikes-collector
 ```
 
 ### 2. Instalar Contenedor con MongoDB:
+
 ⚠️ O contenedor non persiste os datos. Unha vez que se para o contendor eliminarase.
+
 ```bash
 docker run --rm --name mongo-container -d -p 27017:27017 mongo
 ```
 
 ## ⚙️ Configuración
+
 O proxecto utiliza unha base de datos MongoDB local por defecto:
+
 - 🔗 URL: `mongodb://localhost:27017/`
 - 💾 Base de datos: `citybikes`
 - 📁 Colección: `stations`
 
 ## 📂 Estructura do proxecto
+
 ```bash
 citybikes-collector/
 ├── src/
@@ -54,26 +64,111 @@ citybikes-collector/
 └── README.md        # Documentación
 ```
 
+## 🌐 CityBikes API
+
+Este proxecto utiliza a API de CityBikes para recoller datos sobre a dispoñibilidade de bicicletas.
+
+URL: [URL](https://api.citybik.es/v2/)
+
+### Endpoints Principais
+
+1. **Listar Redes de Bicicletas**
+   - **URL**: `http://api.citybik.es/v2/networks`
+   - **Resposta**:
+
+    ```json
+    {
+    "networks": [
+        {
+        "id": "bicicorunha",
+        "name": "Bicicoruña",
+        "location": {
+            "latitude": 43.3623,
+            "longitude": -8.4115,
+            "city": "A Coruña",
+            "country": "ES"
+        },
+        "href": "/v2/networks/bicicorunha",
+        "company": [
+            "PBSC Urban Solutions"
+        ],
+        "gbfs_href": "https://acoruna.publicbikesystem.net/customer/gbfs/v2/gbfs.json"
+        }
+    ]
+    }
+    ```
+
+2. **Obter Información sobre unha Rede**
+   - **URL**: `http://api.citybik.es/v2/networks/{network_id}`
+   - **Resposta**:
+
+     ```json
+     {
+       "network": {
+         "id": "bicicorunha",
+         "name": "Bicicoruña",
+         "location": {...},
+         "href": "/v2/networks/bicicorunha",
+         "company": [
+           "PBSC Urban Solutions"
+         ],
+         "gbfs_href": "https://acoruna.publicbikesystem.net/customer/gbfs/v2/gbfs.json",
+         "stations": [
+           {
+             "id": "023efce1bbb332a1b918d56aeb671890",
+             "name": "Avenida de Arteixo",
+             "latitude": 43.360755,
+             "longitude": -8.410942,
+             "timestamp": "2024-12-10T13:23:47.619019Z",
+             "free_bikes": 5,
+             "empty_slots": 10,
+             "extra": {...}
+             ...
+           }
+         ]
+       }
+     }
+     ```
+
+### Filtrado de Campos
+
+Engade `?fields=list,of,fields` á URL para filtrar os campos na resposta. Por exemplo:
+
+```bash
+http://api.citybik.es/v2/networks?fields=id,name
+```
+
+### Formato
+
+A API devolve datos en formato JSON.
+
 ## 📋 Uso
 
 ### 1. Recollida de datos
+
 Para iniciar a recollida de datos das estacións:
+
 ```bash
 python src/fetch_data.py
 ```
 
 ### 2. Exportación de datos
+
 Para exportar os datos recollidos a un ficheiro CSV ou Parquet:
+
 ```bash
 python src/export_data.py
 ```
 
 📁 Os ficheiros exportados gardaranse no directorio `data/` co formato:
+
 - `citybikes_data_AAAAMMDD_HHMMSS.csv`
 - `citybikes_data_AAAAMMDD_HHMMSS.parquet`
 
 ## 📊 Estrutura dos datos
+
 Os datos recollidos inclúen:
+
 - `id`: Identificador único da estación
 - `name`: Nome da estación
 - `timestamp`: Data e hora da recollida
@@ -86,6 +181,7 @@ Os datos recollidos inclúen:
 - `ebikes`: Número de bicicletas eléctricas
 
 Exemplo de CSV:
+
 ```bash
 id,empty_slots,free_bikes,name,timestamp,uid,last_updated,slots,normal_bikes,ebikes
 023efce1bbb332a1b918d56aeb671890,13,2,Avenida de Arteixo,2024-12-10T08:32:47.715830Z,53,1733819412,15,2,0
