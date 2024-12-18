@@ -1,0 +1,5 @@
+pymongo
+requests
+pyarrow
+fastparquet
+pandas
