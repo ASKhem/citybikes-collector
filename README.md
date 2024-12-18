@@ -79,6 +79,30 @@ python src/export_data.py
 - `citybikes_data_AAAAMMDD_HHMMSS.csv`
 - `citybikes_data_AAAAMMDD_HHMMSS.parquet`
 
+### 3. Opcións de execución do script contra MongoDB Atlas:
+
+#### Opción A: Usando a variable de contorno desde liña de comandos:
+
+```bash
+docker build -t citybikes .
+docker run -e MONGODB_URL="mongodb+srv://tu_usuario:tu_password@tu_cluster.mongodb.net/" citybikes
+```
+
+#### Opción B: Usando un arquivo .env:
+
+```bash
+docker build -t citybikes .
+docker run --env-file .env citybikes
+```
+
+Para que isto funcione, necesitas:
+
+1. Crear un arquivo `.env` coa túa URL de MongoDB Atlas:
+
+```env
+MONGODB_URL=mongodb+srv://tu_usuario:tu_password@tu_cluster.mongodb.net/
+```
+
 ## ⚙️ Configuración
 
 O proxecto utiliza unha base de datos MongoDB local por defecto:
