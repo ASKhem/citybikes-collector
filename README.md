@@ -68,16 +68,30 @@ docker run --rm --name mongo-container -d -p 27017:27017 mongo
 python src/fetch_data.py
 ```
 
-4. Exportar datos (opcional):
+4. Exportar datos:
 
+#### Opción A: Exportar desde MongoDB local
+```bash
+python src/export_data.py
+```
+
+#### Opción B: Exportar desde MongoDB Atlas
+
+1. Configura a conexión con MongoDB Atlas:
+```env
+MONGODB_URL=mongodb+srv://tu_usuario:tu_password@tu_cluster.mongodb.net/
+```
+
+2. Executa o script de exportación:
 ```bash
 python src/export_data.py
 ```
 
 📁 Os ficheiros exportados gardaranse no directorio `data/` co formato:
-
 - `citybikes_data_AAAAMMDD_HHMMSS.csv`
 - `citybikes_data_AAAAMMDD_HHMMSS.parquet`
+
+> ℹ️ O script de exportación detectará automaticamente a fonte dos datos (MongoDB local ou Atlas) baseándose na variable de contorno MONGODB_URL.
 
 ### 3. Opcións de execución do script contra MongoDB Atlas:
 

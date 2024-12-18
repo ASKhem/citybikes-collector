@@ -2,38 +2,44 @@ import pandas as pd
 from pymongo import MongoClient
 from datetime import datetime
 import sys
+import os
+from dotenv import load_dotenv
 
 def export_data():
     try:
-        client = MongoClient('mongodb://localhost:27017/')
+        # Cargar configuración de MongoDB desde .env
+        load_dotenv()
+        mongodb_url = os.getenv('MONGODB_URL', 'mongodb://localhost:27017/')
+        
+        client = MongoClient(mongodb_url)
         db = client['citybikes']
         collection = db['stations']
         
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S') #Para nomear os ficheiros
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         
-        # Exportar datos
+        # Asegurar que existe el directorio data
+        os.makedirs('data', exist_ok=True)
+        
+        # Exportar datos con los mismos campos que fetch_data.py guarda
         data = list(collection.find({}, {
             '_id': 0,
-            'id': 1,
-            'name': 1,
+            'station_id': 1,
             'timestamp': 1,
-            'free_bikes': 1,
             'empty_slots': 1,
-            'extra': 1   
+            'free_bikes': 1,
+            'name': 1,
+            'last_updated': 1,
+            'slots': 1,
+            'normal_bikes': 1,
+            'ebikes': 1
         }))
         
         df = pd.DataFrame(data)
-
-        # Normalizar columnas de 'extra'
-        if not df.empty and 'extra' in df.columns:
-            extra_columns = ['uid', 'last_updated', 'slots', 'normal_bikes', 'ebikes']
-            extra_df = pd.json_normalize(df['extra'])[extra_columns]
-            df = pd.concat([df.drop(columns=['extra']), extra_df], axis=1)
         
         if not df.empty:
             df.to_csv(f'data/citybikes_data{timestamp}.csv', index=False)
             df.to_parquet(f'data/citybikes_data{timestamp}.parquet', index=False)
-            print(f"Exportado {len(df)} registros.")
+            print(f"Exportado {len(df)} registros desde {mongodb_url}")
         else:
             print("No se encontraron datos para exportar.")
             
