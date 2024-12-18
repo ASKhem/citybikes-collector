@@ -226,3 +226,90 @@ http://api.citybik.es/v2/networks?fields=id,name
 ### Formato
 
 A API devolve datos en formato JSON.
+
+## 🐳 Docker Hub
+
+A imaxe do proxecto está dispoñible en Docker Hub:
+
+```bash
+docker pull askhem/citybikes:latest
+```
+
+### Execución con Docker Hub
+
+1. Execución simple:
+
+```bash
+docker run -d askhem/citybikes:latest
+```
+
+2. Execución con MongoDB usando docker-compose:
+
+```bash
+# Descarga o arquivo docker-compose.prod.yml
+wget https://raw.githubusercontent.com/ASKhem/citybikes-collector/main/docker-compose.prod.yml
+
+# Executa os servizos
+docker compose -f docker-compose.prod.yml up -d
+```
+
+### Actualización automática
+
+O proxecto está configurado con GitHub Actions para actualizar automaticamente a imaxe en Docker Hub cando se fan cambios no repositorio.
+
+Podes ver a imaxe en: [Docker Hub - askhem/citybikes](https://hub.docker.com/r/askhem/citybikes)
+
+## 🔄 Integración Continua e Despliegue
+
+### GitHub Actions
+
+O proxecto utiliza GitHub Actions para a integración continua. Cada vez que se fai un push á rama `main`, automaticamente:
+
+1. Constrúese unha nova imaxe Docker
+2. Súbese a imaxe a Docker Hub
+3. Actualízase a tag `latest`
+
+Para configurar GitHub Actions no teu fork:
+
+1. Configura os seguintes secrets no teu repositorio:
+   - `DOCKERHUB_USERNAME`: O teu nome de usuario en Docker Hub
+   - `DOCKERHUB_TOKEN`: O teu token de acceso de Docker Hub
+
+2. Asegúrate de que as GitHub Actions teñen permisos de escritura:
+   - Settings → Actions → General
+   - En "Workflow permissions" selecciona "Read and write permissions"
+
+### Monitorización
+
+Os datos recóllense cada 5 minutos (300 segundos). Estimación de documentos:
+
+- Por hora: 588 documentos (49 estacións × 12 actualizacións)
+- Por día: 14,112 documentos
+- Por mes: ~423,360 documentos
+
+> ℹ️ Estes cálculos están baseados nas 49 estacións de Bicicoruña
+
+### Mantemento
+
+Para manter o servizo actualizado en producción:
+
+```bash
+# Actualizar a última versión
+docker compose -f docker-compose.prod.yml pull
+docker compose -f docker-compose.prod.yml up -d
+```
+
+Para automatizar as actualizacións:
+```bash
+# Crear script de actualización
+cat > update.sh << 'EOF'
+#!/bin/bash
+docker compose -f docker-compose.prod.yml pull
+docker compose -f docker-compose.prod.yml up -d
+EOF
+
+chmod +x update.sh
+
+# Configurar actualización diaria ás 4 AM
+(crontab -l 2>/dev/null; echo "0 4 * * * $PWD/update.sh") | crontab -
+```
