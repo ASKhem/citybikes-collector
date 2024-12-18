@@ -31,32 +31,6 @@ cd citybikes-collector
 docker compose up -d
 ```
 
-## 🚀 Deploy en OpenStack (CESGA)
-
-### 1. Conexión a la instancia
-
-```bash
-# Conectarse a la instancia usando la llave privada
-ssh -i /ruta/a/tu/llave/privada cesgaxuser@10.133.27.7
-```
-
-### 2. Verificar el funcionamiento
-
-```bash
-# Ver contenedores en ejecución
-docker ps
-
-# Ver logs de la aplicación
-docker-compose -f docker-compose.prod.yml logs -f citybikes
-
-# Verificar datos en MongoDB
-docker exec -it $(docker ps -q -f name=mongodb) mongosh
-# Una vez dentro de MongoDB:
-use citybikes
-db.stations.countDocuments({})
-```
-
-
 #### Opción B: Con Docker e MongoDB Atlas
 
 1. Configura o arquivo .env:
@@ -339,3 +313,29 @@ chmod +x update.sh
 # Configurar actualización diaria ás 4 AM
 (crontab -l 2>/dev/null; echo "0 4 * * * $PWD/update.sh") | crontab -
 ```
+
+## 🚀 Deploy en OpenStack (CESGA)
+
+### 1. Conexión a la instancia
+
+```bash
+# Conectarse a la instancia usando la llave privada
+ssh -i /ruta/a/tu/llave/privada cesgaxuser@10.133.27.7
+```
+
+### 2. Verificar el funcionamiento
+
+```bash
+# Ver contenedores en ejecución
+docker ps
+
+# Ver logs de la aplicación
+docker-compose -f docker-compose.prod.yml logs -f citybikes
+
+# Verificar datos en MongoDB
+docker exec -it $(docker ps -q -f name=mongodb) mongosh
+# Una vez dentro de MongoDB:
+use citybikes
+db.stations.countDocuments({})
+```
+
