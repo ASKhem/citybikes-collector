@@ -6,11 +6,11 @@ Este proxecto é unha ferramenta para recoller e exportar datos das estacións d
 
 ## ⭐ Características principais
 
-- 🔄 Recollida de datos en tempo real das estacións de bicicletas
-- 💾 Almacenamento en MongoDB
-- 📊 Exportación de datos en formatos CSV e Parquet
-- 📡 Monitorización do estado das estacións
-- 🔋 Seguimento de bicicletas normais e eléctricas
+- Recollida de datos en tempo real das estacións de bicicletas
+- Almacenamento en MongoDB
+- Exportación de datos en formatos CSV e Parquet
+- Monitorización do estado das estacións
+- Seguimento de bicicletas normais e eléctricas
 
 ## 📚 Guía rápida de inicio
 
