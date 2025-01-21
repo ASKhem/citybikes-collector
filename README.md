@@ -121,9 +121,9 @@ MONGODB_URL=mongodb+srv://tu_usuario:tu_password@tu_cluster.mongodb.net/
 
 O proxecto utiliza unha base de datos MongoDB local por defecto:
 
-- 🔗 URL: `mongodb://localhost:27017/`
-- 💾 Base de datos: `citybikes`
-- 📁 Colección: `stations`
+- URL: `mongodb://localhost:27017/`
+- Base de datos: `citybikes`
+- Colección: `stations`
 
 ## 📂 Estructura do proxecto
 
