@@ -242,7 +242,7 @@ chmod +x update.sh
 
 ```bash
 # Conectarse a la instancia usando la llave privada
-ssh -i /ruta/a/tu/llave/privada cesgaxuser@10.133.27.7
+ssh -i /ruta/a/tu/llave/privada cesgaxuser@ip_maquina
 ```
 
 ### 2. Verificar el funcionamiento
